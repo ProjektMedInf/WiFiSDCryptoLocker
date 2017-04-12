@@ -26,5 +26,6 @@ dependencies {
     })
     compile 'com.android.support:appcompat-v7:25.+'
     compile 'com.android.support:design:25.+'
+    compile group: 'org.bouncycastle', name: 'bcprov-jdk15on', version: '1.56'
     testCompile 'junit:junit:4.12'
 }
