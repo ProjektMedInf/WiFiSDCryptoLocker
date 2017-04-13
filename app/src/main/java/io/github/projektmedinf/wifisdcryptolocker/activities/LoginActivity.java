@@ -3,6 +3,7 @@ package io.github.projektmedinf.wifisdcryptolocker.activities;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
+import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -12,12 +13,11 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.inputmethod.EditorInfo;
-import android.widget.AutoCompleteTextView;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.TextView;
+import android.widget.*;
 import edu.vt.middleware.password.*;
 import io.github.projektmedinf.wifisdcryptolocker.R;
+import io.github.projektmedinf.wifisdcryptolocker.model.Userdata;
+import io.github.projektmedinf.wifisdcryptolocker.utils.DatabaseHelper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,13 +27,6 @@ import java.util.List;
  */
 public class LoginActivity extends AppCompatActivity {
 
-    /**
-     * A dummy authentication store containing known user names and passwords.
-     * TODO: remove after connecting to a real authentication system.
-     */
-    private static final String[] DUMMY_CREDENTIALS = new String[]{
-            "foo:H3llo!", "bar:world"
-    };
     /**
      * Keep track of the login task to ensure we can cancel it if requested.
      */
@@ -49,6 +42,8 @@ public class LoginActivity extends AppCompatActivity {
     private EditText mPasswordView;
     private View mProgressView;
     private View mLoginFormView;
+
+    private DatabaseHelper databaseHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,6 +94,8 @@ public class LoginActivity extends AppCompatActivity {
 
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
+
+        databaseHelper = new DatabaseHelper(getApplicationContext());
     }
 
     /**
@@ -299,24 +296,15 @@ public class LoginActivity extends AppCompatActivity {
 
         @Override
         protected Boolean doInBackground(Void... params) {
-            // TODO: attempt authentication against the local DB
+            // TODO: use hashing
 
-            try {
-                // Simulate network access.
-                Thread.sleep(2000);
-            } catch (InterruptedException e) {
-                return false;
+
+            Userdata found = databaseHelper.getUserdataByName(mUsername);
+            if (found == null){
+                return  false;
+            } else {
+                return found.getPassword().equals(mPassword);
             }
-
-            for (String credential : DUMMY_CREDENTIALS) {
-                String[] pieces = credential.split(":");
-                if (pieces[0].equals(mUsername)) {
-                    // Account exists, return true if the password matches.
-                    return pieces[1].equals(mPassword);
-                }
-            }
-
-            return false;
         }
 
         @Override
@@ -352,14 +340,10 @@ public class LoginActivity extends AppCompatActivity {
 
         @Override
         protected Boolean doInBackground(Void... params) {
-            // TODO: attempt register new acc in the local DB
+            // TODO: use password hashing
 
-            try {
-                // Simulate network access.
-                Thread.sleep(2000);
-            } catch (InterruptedException e) {
-                return false;
-            }
+            // Simulate network access.
+            databaseHelper.insertUserdata(mUsername, mPassword);
 
             return true;
         }
@@ -372,6 +356,14 @@ public class LoginActivity extends AppCompatActivity {
             if (success) {
                 // TODO: open new view
                 finish();
+                startActivity(getIntent());
+
+                Context context = getApplicationContext();
+                CharSequence text = "User created. Please sign in";
+                int duration = Toast.LENGTH_SHORT;
+
+                Toast toast = Toast.makeText(context, text, duration);
+                toast.show();
             } else {
                 // TODO: error handling for DB
             }
