@@ -1,4 +1,4 @@
-package io.github.projektmedinf.wifisdcryptolocker;
+package io.github.projektmedinf.wifisdcryptolocker.activities;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
@@ -17,6 +17,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import edu.vt.middleware.password.*;
+import io.github.projektmedinf.wifisdcryptolocker.R;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -56,11 +57,23 @@ public class LoginActivity extends AppCompatActivity {
         // Set up the login form.
         mUsernameView = (AutoCompleteTextView) findViewById(R.id.username);
 
+        // setting focus to password field if "next" is clicked
+        // it somehow didn't work through the XML with nextFocusForward or the others
+        mUsernameView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                mPasswordView.requestFocus();
+                return true;
+            }
+        });
+
         mPasswordView = (EditText) findViewById(R.id.password);
+
+        // try to log in if done button is clicked on the keyboard
         mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
-                if (id == R.id.login || id == EditorInfo.IME_NULL) {
+                if (id == EditorInfo.IME_ACTION_DONE) {
                     attemptLogin();
                     return true;
                 }
@@ -180,6 +193,12 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Checks if the given password satisfies the predefined password criteria
+     *
+     * @param password the password which should be checked
+     * @return true, if the password is ok, false otherwise (in this case the error message will also be set)
+     */
     private boolean isPasswordValid(String password) {
 
         // pwd between 8 and 16 chars
