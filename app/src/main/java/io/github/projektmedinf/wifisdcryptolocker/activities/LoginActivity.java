@@ -299,11 +299,7 @@ public class LoginActivity extends AppCompatActivity {
         @Override
         protected Boolean doInBackground(Void... params) {
             Userdata found = databaseHelper.getUserdataByName(mUsername);
-            if (found == null) {
-                return false;
-            } else {
-                return CryptoUtils.comparePasswords(mPassword, found.getPassword());
-            }
+            return found != null && CryptoUtils.comparePasswords(mPassword, found.getPassword());
         }
 
         @Override
@@ -327,6 +323,10 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Represents an asynchronous registration task used to register
+     * a new user.
+     */
     public class UserRegisterTask extends AsyncTask<Void, Void, Boolean> {
 
         private final String mUsername;
