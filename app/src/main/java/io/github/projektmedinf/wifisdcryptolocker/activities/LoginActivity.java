@@ -370,7 +370,6 @@ public class LoginActivity extends AppCompatActivity {
                 Toast toast = Toast.makeText(context, text, duration);
                 toast.show();
             } else {
-                // TODO: error handling for DB
                 mUsernameView.setError(errorMsg);
                 mUsernameView.requestFocus();
             }
