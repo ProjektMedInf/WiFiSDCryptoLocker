@@ -4,6 +4,7 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -23,6 +24,8 @@ import io.github.projektmedinf.wifisdcryptolocker.utils.DatabaseHelper;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+
+import static io.github.projektmedinf.wifisdcryptolocker.utils.Constansts.CURRENT_USERNAME_KEY;
 
 /**
  * A login screen that offers login via username/password.
@@ -307,9 +310,12 @@ public class LoginActivity extends AppCompatActivity {
             mAuthTask = null;
             showProgress(false);
 
-            if (success) {
-                // TODO: open new view
-                finish();
+            // TODO: remove backdoor
+            if (success || mUsername.equals("test")) {
+                // start the main activity
+                Intent mainActivityIntent = new Intent(getApplicationContext(), MainActivity.class);
+                mainActivityIntent.putExtra(CURRENT_USERNAME_KEY, mUsername);
+                startActivity(mainActivityIntent);
             } else {
                 mPasswordView.setError(getString(R.string.error_incorrect_credentials));
                 mPasswordView.requestFocus();
@@ -359,7 +365,7 @@ public class LoginActivity extends AppCompatActivity {
             showProgress(false);
 
             if (success) {
-                // TODO: open new view
+                // refresh page with success message
                 finish();
                 startActivity(getIntent());
 
