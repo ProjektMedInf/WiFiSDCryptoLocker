@@ -6,7 +6,7 @@ import org.springframework.security.crypto.scrypt.SCryptPasswordEncoder;
 /**
  * Created by stiefel40k on 14.04.17.
  */
-public class PasswordUtils {
+public class CryptoUtils {
 
     private static PasswordEncoder passwordEncoder = new SCryptPasswordEncoder();
 
