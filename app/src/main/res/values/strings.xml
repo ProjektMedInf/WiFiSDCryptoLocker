@@ -15,4 +15,10 @@
     <string name="permission_rationale">"Contacts permissions are needed for providing email completions."</string>
     <string name="username_already_exists">The username already exists</string>
     <string name="database_error">An error occurred during accessing the database</string>
+    <string name="title_activity_main">MainActivity</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_settings">Settings</string>
 </resources>
