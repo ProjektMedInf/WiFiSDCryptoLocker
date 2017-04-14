@@ -17,8 +17,10 @@ import android.widget.*;
 import edu.vt.middleware.password.*;
 import io.github.projektmedinf.wifisdcryptolocker.R;
 import io.github.projektmedinf.wifisdcryptolocker.model.Userdata;
+import io.github.projektmedinf.wifisdcryptolocker.utils.CryptoUtils;
 import io.github.projektmedinf.wifisdcryptolocker.utils.DatabaseHelper;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -296,14 +298,11 @@ public class LoginActivity extends AppCompatActivity {
 
         @Override
         protected Boolean doInBackground(Void... params) {
-            // TODO: use hashing
-
-
             Userdata found = databaseHelper.getUserdataByName(mUsername);
-            if (found == null){
-                return  false;
+            if (found == null) {
+                return false;
             } else {
-                return found.getPassword().equals(mPassword);
+                return CryptoUtils.comparePasswords(mPassword, found.getPassword());
             }
         }
 
@@ -332,6 +331,7 @@ public class LoginActivity extends AppCompatActivity {
 
         private final String mUsername;
         private final String mPassword;
+        private String errorMsg;
 
         UserRegisterTask(String username, String password) {
             mUsername = username;
@@ -340,17 +340,22 @@ public class LoginActivity extends AppCompatActivity {
 
         @Override
         protected Boolean doInBackground(Void... params) {
-            // TODO: use password hashing
-
-            // Simulate network access.
-            databaseHelper.insertUserdata(mUsername, mPassword);
-
-            return true;
+            switch ((new BigDecimal(databaseHelper.insertUserdata(mUsername,
+                    CryptoUtils.hashPassword(mPassword))).intValueExact())) {
+                case -1:
+                    errorMsg = getString(R.string.database_error);
+                    return false;
+                case -2:
+                    errorMsg = getString(R.string.username_already_exists);
+                    return false;
+                default:
+                    return true;
+            }
         }
 
         @Override
         protected void onPostExecute(final Boolean success) {
-            mAuthTask = null;
+            mRegisterTask = null;
             showProgress(false);
 
             if (success) {
@@ -366,12 +371,15 @@ public class LoginActivity extends AppCompatActivity {
                 toast.show();
             } else {
                 // TODO: error handling for DB
+                mUsernameView.setError(errorMsg);
+                mUsernameView.requestFocus();
             }
         }
 
         @Override
         protected void onCancelled() {
             mRegisterTask = null;
+            errorMsg = null;
             showProgress(false);
         }
     }

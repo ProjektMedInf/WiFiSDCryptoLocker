@@ -13,4 +13,6 @@
     <string name="error_incorrect_credentials">The username or the password is incorrect</string>
     <string name="error_field_required">This field is required</string>
     <string name="permission_rationale">"Contacts permissions are needed for providing email completions."</string>
+    <string name="username_already_exists">The username already exists</string>
+    <string name="database_error">An error occurred during accessing the database</string>
 </resources>

@@ -83,8 +83,19 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return toReturn;
     }
 
-    public long insertUserdata(String username, String password){
+    /**
+     * Inserts a new user into the database
+     *
+     * @param username the chosen username
+     * @param password the hashed password
+     * @return the id of the user on success. -1 if a general database error occurred and -2 i the user already exists.
+     */
+    public long insertUserdata(String username, String password) {
         SQLiteDatabase db = this.getReadableDatabase();
+
+        if(getUserdataByName(username) != null){
+            return -2;
+        }
 
         ContentValues contentValues = new ContentValues();
         contentValues.put(KEY_USERNAME, username);
