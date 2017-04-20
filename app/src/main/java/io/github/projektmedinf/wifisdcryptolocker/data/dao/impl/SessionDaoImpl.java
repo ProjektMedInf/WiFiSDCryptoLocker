@@ -48,4 +48,27 @@ public class SessionDaoImpl implements SessionDao {
 
         return sessionList;
     }
+
+    @Override
+    public Session getSessionBySessionId(long sessionId) {
+        Session toReturn = null;
+
+        Cursor cursor = sqLiteDatabase.query(TABLE_NAME_SESSION, null, "id=?",
+                new String[]{Long.toString(sessionId)}, null, null, null);
+
+        if (cursor != null) {
+            if (cursor.moveToFirst()) {
+                toReturn = new Session(
+                        cursor.getLong(cursor.getColumnIndex(COLUMN_NAME_SESSION_ID)),
+                        cursor.getBlob(cursor.getColumnIndex(COLUMN_NAME_ENCRYPTED_DATE)),
+                        new Date(),
+                        cursor.getString(cursor.getColumnIndex(COLUMN_NAME_LOCATION)),
+                        cursor.getBlob(cursor.getColumnIndex(COLUMN_NAME_INITIALISATION_VECTOR))
+                );
+            }
+            cursor.close();
+        }
+
+        return toReturn;
+    }
 }

@@ -1,5 +1,6 @@
 package io.github.projektmedinf.wifisdcryptolocker.data.dao;
 
+import io.github.projektmedinf.wifisdcryptolocker.model.Image;
 import io.github.projektmedinf.wifisdcryptolocker.model.Session;
 
 import java.util.List;
@@ -7,9 +8,7 @@ import java.util.List;
 /**
  * Created by stiefel40k on 20.04.17.
  */
-public interface SessionDao {
+public interface ImageDao {
 
-    public List<Session> getAllSessions();
-
-    public Session getSessionBySessionId(long sessionId);
+    List<Image> getImagesBySession(Session session);
 }
