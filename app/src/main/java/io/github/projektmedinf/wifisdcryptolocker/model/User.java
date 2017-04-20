@@ -5,18 +5,18 @@ import java.util.Date;
 /**
  * Created by stiefel40k on 13.04.17.
  */
-public class Userdata {
+public class User {
 
     private long id;
     private String username;
     private String password;
     private Date createdAt;
 
-    public Userdata(){
+    public User(){
 
     }
 
-    public Userdata(long id, String username, String password, Date createdAt) {
+    public User(long id, String username, String password, Date createdAt) {
         this.username = username;
         this.password = password;
     }
@@ -58,12 +58,12 @@ public class Userdata {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        Userdata userdata = (Userdata) o;
+        User user = (User) o;
 
-        if (id != userdata.id) return false;
-        if (!username.equals(userdata.username)) return false;
-        if (!password.equals(userdata.password)) return false;
-        return createdAt.equals(userdata.createdAt);
+        if (id != user.id) return false;
+        if (!username.equals(user.username)) return false;
+        if (!password.equals(user.password)) return false;
+        return createdAt.equals(user.createdAt);
     }
 
     @Override
@@ -77,7 +77,7 @@ public class Userdata {
 
     @Override
     public String toString() {
-        return "Userdata{" +
+        return "User{" +
                 "id=" + id +
                 ", username='" + username + '\'' +
                 ", password='" + password + '\'' +

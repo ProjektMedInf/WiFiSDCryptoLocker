@@ -6,7 +6,7 @@ import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import io.github.projektmedinf.wifisdcryptolocker.data.dao.UserDao;
-import io.github.projektmedinf.wifisdcryptolocker.model.Userdata;
+import io.github.projektmedinf.wifisdcryptolocker.model.User;
 import io.github.projektmedinf.wifisdcryptolocker.utils.DatabaseHelper;
 
 import java.text.ParseException;
@@ -30,8 +30,8 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public Userdata getUserByUserName(String userName) {
-        Userdata toReturn = null;
+    public User getUserByUserName(String userName) {
+        User toReturn = null;
 
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
 
@@ -41,7 +41,7 @@ public class UserDaoImpl implements UserDao {
         if (cursor != null) {
             if (cursor.moveToFirst()) {
                 try {
-                    toReturn = new Userdata(
+                    toReturn = new User(
                             cursor.getLong(cursor.getColumnIndex(COLUMN_NAME_USER_ID)),
                             cursor.getString(cursor.getColumnIndex(COLUMN_NAME_USERNAME)),
                             cursor.getString(cursor.getColumnIndex(COLUMN_NAME_PASSWORD)),

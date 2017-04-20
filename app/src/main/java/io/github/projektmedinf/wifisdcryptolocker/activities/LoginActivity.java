@@ -17,7 +17,7 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.*;
 import edu.vt.middleware.password.*;
 import io.github.projektmedinf.wifisdcryptolocker.R;
-import io.github.projektmedinf.wifisdcryptolocker.model.Userdata;
+import io.github.projektmedinf.wifisdcryptolocker.model.User;
 import io.github.projektmedinf.wifisdcryptolocker.service.UserService;
 import io.github.projektmedinf.wifisdcryptolocker.service.impl.UserServiceImpl;
 import io.github.projektmedinf.wifisdcryptolocker.utils.CryptoUtils;
@@ -302,7 +302,7 @@ public class LoginActivity extends AppCompatActivity {
 
         @Override
         protected Boolean doInBackground(Void... params) {
-            Userdata found = userService.getUserByUserName(mUsername);
+            User found = userService.getUserByUserName(mUsername);
             return found != null && CryptoUtils.comparePasswords(mPassword, found.getPassword());
         }
 

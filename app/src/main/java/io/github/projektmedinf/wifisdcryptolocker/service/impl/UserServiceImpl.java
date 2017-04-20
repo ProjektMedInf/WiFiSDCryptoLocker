@@ -3,9 +3,8 @@ package io.github.projektmedinf.wifisdcryptolocker.service.impl;
 import android.content.Context;
 import io.github.projektmedinf.wifisdcryptolocker.data.dao.UserDao;
 import io.github.projektmedinf.wifisdcryptolocker.data.dao.impl.UserDaoImpl;
-import io.github.projektmedinf.wifisdcryptolocker.model.Userdata;
+import io.github.projektmedinf.wifisdcryptolocker.model.User;
 import io.github.projektmedinf.wifisdcryptolocker.service.UserService;
-import io.github.projektmedinf.wifisdcryptolocker.utils.DatabaseHelper;
 
 /**
  * Created by stiefel40k on 20.04.17.
@@ -19,7 +18,7 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public Userdata getUserByUserName(String userName) {
+    public User getUserByUserName(String userName) {
         return userDao.getUserByUserName(userName);
     }
 
