@@ -15,8 +15,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 import io.github.projektmedinf.wifisdcryptolocker.R;
+import io.github.projektmedinf.wifisdcryptolocker.model.User;
 
-import static io.github.projektmedinf.wifisdcryptolocker.utils.Constansts.CURRENT_USERNAME_KEY;
+import static io.github.projektmedinf.wifisdcryptolocker.utils.Constansts.CURRENT_USER_KEY;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -48,8 +49,9 @@ public class MainActivity extends AppCompatActivity
 
         Intent currentIntent = getIntent();
         NavigationView navigationHeaderView = (NavigationView) findViewById(R.id.nav_view);
-        TextView asd = (TextView) navigationHeaderView.getHeaderView(0).findViewById(R.id.menu_username_textView);
-        asd.setText(currentIntent.getStringExtra(CURRENT_USERNAME_KEY));
+        TextView menuUsernameTextView = (TextView) navigationHeaderView.getHeaderView(0).findViewById(R.id.menu_username_textView);
+        User loggedInUser = currentIntent.getParcelableExtra(CURRENT_USER_KEY);
+        menuUsernameTextView.setText(loggedInUser.getUsername());
     }
 
     @Override

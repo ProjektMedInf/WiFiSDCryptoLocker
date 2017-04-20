@@ -26,7 +26,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
-import static io.github.projektmedinf.wifisdcryptolocker.utils.Constansts.CURRENT_USERNAME_KEY;
+import static io.github.projektmedinf.wifisdcryptolocker.utils.Constansts.CURRENT_USER_KEY;
 
 /**
  * A login screen that offers login via username/password.
@@ -294,6 +294,7 @@ public class LoginActivity extends AppCompatActivity {
 
         private final String mUsername;
         private final String mPassword;
+        private User found;
 
         UserLoginTask(String username, String password) {
             mUsername = username;
@@ -302,7 +303,7 @@ public class LoginActivity extends AppCompatActivity {
 
         @Override
         protected Boolean doInBackground(Void... params) {
-            User found = userService.getUserByUserName(mUsername);
+            found = userService.getUserByUserName(mUsername);
             return found != null && CryptoUtils.comparePasswords(mPassword, found.getPassword());
         }
 
@@ -315,7 +316,11 @@ public class LoginActivity extends AppCompatActivity {
             if (success || mUsername.equals("test")) {
                 // start the main activity
                 Intent mainActivityIntent = new Intent(getApplicationContext(), MainActivity.class);
-                mainActivityIntent.putExtra(CURRENT_USERNAME_KEY, mUsername);
+                // set the password to the plain text, this way we can access it during runtime,
+                // and the user doesn't have to type it in every time git he/she wants to access
+                // encrypted data
+                found.setPassword(mPassword);
+                mainActivityIntent.putExtra(CURRENT_USER_KEY, found);
                 startActivity(mainActivityIntent);
             } else {
                 mPasswordView.setError(getString(R.string.error_incorrect_credentials));

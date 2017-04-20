@@ -1,11 +1,14 @@
 package io.github.projektmedinf.wifisdcryptolocker.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.util.Date;
 
 /**
  * Created by stiefel40k on 13.04.17.
  */
-public class User {
+public class User implements Parcelable{
 
     private long id;
     private String username;
@@ -17,6 +20,13 @@ public class User {
         this.username = username;
         this.password = password;
         this.createdAt = createdAt;
+    }
+
+    private User(Parcel parcel){
+        this.id = parcel.readLong();
+        this.username = parcel.readString();
+        this.password = parcel.readString();
+        this.createdAt = new Date(parcel.readLong());
     }
 
     public String getUsername() {
@@ -50,4 +60,29 @@ public class User {
     public void setCreatedAt(Date createdAt) {
         this.createdAt = createdAt;
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int flags) {
+        parcel.writeLong(this.id);
+        parcel.writeString(this.username);
+        parcel.writeString(this.password);
+        parcel.writeLong(this.createdAt.getTime());
+    }
+
+    public static final Parcelable.Creator<User> CREATOR = new Parcelable.Creator<User>() {
+        @Override
+        public User createFromParcel(Parcel parcel) {
+            return new User(parcel);
+        }
+
+        @Override
+        public User[] newArray(int i) {
+            return new User[i];
+        }
+    };
 }
