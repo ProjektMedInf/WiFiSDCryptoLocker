@@ -23,21 +23,47 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     // Table names
     private static final String TABLE_USERDATA = "userdata";
+    private static final String TABLE_IMAGE = "image";
+    private static final String TABLE_SESSION = "session";
 
     // Common column names
-    private static final String KEY_ID = "id";
-    private static final String KEY_CREATED_AT = "created_at";
+    private static final String COLUMN_NAME_ID = "id";
+    private static final String COLUMN_NAME_CREATED_AT = "created_at";
+    private static final String COLUMN_NAME_INITIALISATION_VECTOR = "initialisation_vector";
+    private static final String COLUMN_NAME_PADDING = "padding";
 
     // TABLE_USERDATA Table - column names
-    private static final String KEY_USERNAME = "username";
-    private static final String KEY_PASSWORD = "password";
+    private static final String COLUMN_NAME_USERNAME = "username";
+    private static final String COLUMN_NAME_PASSWORD = "password";
+
+    // TABLE_IMAGE
+    private static final String COLUMN_NAME_ENCRYPTED_IMAGE_DATA = "encrypted_image_data";
+    private static final String COLUMN_NAME_FK_SESSION_ID = "fk_session_id";
+
+    // TABLE_SESSION
+    private static final String COLUMN_NAME_ENCRYPTED_DATE = "encrypted_date";
+    private static final String COLUMN_NAME_LOCATION = "location";
 
     // Table create statements
     private static final String CREATE_USERDATA = "CREATE TABLE " + TABLE_USERDATA + " ("
-            + KEY_ID + " INTEGER PRIMARY KEY, "
-            + KEY_USERNAME + " TEXT UNIQUE NOT NULL, "
-            + KEY_PASSWORD + " TEXT NOT NULL, "
-            + KEY_CREATED_AT + " DATETIME)";
+            + COLUMN_NAME_ID + " INTEGER PRIMARY KEY, "
+            + COLUMN_NAME_USERNAME + " TEXT UNIQUE NOT NULL, "
+            + COLUMN_NAME_PASSWORD + " TEXT NOT NULL, "
+            + COLUMN_NAME_CREATED_AT + " DATETIME)";
+
+    private static final String CREATE_IMAGE = "CREATE TABLE " + TABLE_IMAGE + " ("
+            + COLUMN_NAME_ID + " INTEGER PRIMARY KEY, "
+            + COLUMN_NAME_ENCRYPTED_IMAGE_DATA + " BLOB NOT NULL, "
+            + COLUMN_NAME_INITIALISATION_VECTOR + " BLOB NOT NULL, "
+            + COLUMN_NAME_PADDING + " INTEGER,"
+            + COLUMN_NAME_FK_SESSION_ID + " INTEGER,"
+            + "FOREIGN KEY(" + COLUMN_NAME_FK_SESSION_ID + ") REFERENCES " + TABLE_SESSION + "(" + COLUMN_NAME_ID + "))";
+
+    private static final String CREATE_SESSION = "CREATE TABLE " + TABLE_SESSION + " ("
+            + COLUMN_NAME_ID + " INTEGER PRIMARY KEY, "
+            + COLUMN_NAME_ENCRYPTED_DATE + " BLOB NOT NULL, "
+            + COLUMN_NAME_LOCATION + " TEXT, "
+            + COLUMN_NAME_CREATED_AT + " DATETIME)";
 
     public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -45,13 +71,18 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
+
         sqLiteDatabase.execSQL(CREATE_USERDATA);
+        sqLiteDatabase.execSQL(CREATE_SESSION);
+        sqLiteDatabase.execSQL(CREATE_IMAGE);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int oldVersion, int newVersion) {
 
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + TABLE_USERDATA);
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + TABLE_IMAGE);
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + TABLE_SESSION);
 
         onCreate(sqLiteDatabase);
     }
@@ -69,10 +100,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             if (cursor.moveToFirst()) {
                 try {
                     toReturn = new Userdata(
-                            cursor.getLong(cursor.getColumnIndex(KEY_ID)),
-                            cursor.getString(cursor.getColumnIndex(KEY_USERNAME)),
-                            cursor.getString(cursor.getColumnIndex(KEY_PASSWORD)),
-                            dateFormat.parse(cursor.getString(cursor.getColumnIndex(KEY_CREATED_AT)))
+                            cursor.getLong(cursor.getColumnIndex(COLUMN_NAME_ID)),
+                            cursor.getString(cursor.getColumnIndex(COLUMN_NAME_USERNAME)),
+                            cursor.getString(cursor.getColumnIndex(COLUMN_NAME_PASSWORD)),
+                            dateFormat.parse(cursor.getString(cursor.getColumnIndex(COLUMN_NAME_CREATED_AT)))
                     );
                 } catch (ParseException e) {
                     throw new SQLException("Parsing the date led to an error.");
@@ -93,14 +124,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public long insertUserdata(String username, String password) {
         SQLiteDatabase db = this.getReadableDatabase();
 
-        if(getUserdataByName(username) != null){
+        if (getUserdataByName(username) != null) {
             return -2;
         }
 
         ContentValues contentValues = new ContentValues();
-        contentValues.put(KEY_USERNAME, username);
-        contentValues.put(KEY_PASSWORD, password);
-        contentValues.put(KEY_CREATED_AT, getDateTime());
+        contentValues.put(COLUMN_NAME_USERNAME, username);
+        contentValues.put(COLUMN_NAME_PASSWORD, password);
+        contentValues.put(COLUMN_NAME_CREATED_AT, getDateTime());
 
         return db.insert(TABLE_USERDATA, null, contentValues);
     }
