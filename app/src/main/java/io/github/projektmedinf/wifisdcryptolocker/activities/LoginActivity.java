@@ -18,8 +18,9 @@ import android.widget.*;
 import edu.vt.middleware.password.*;
 import io.github.projektmedinf.wifisdcryptolocker.R;
 import io.github.projektmedinf.wifisdcryptolocker.model.Userdata;
+import io.github.projektmedinf.wifisdcryptolocker.service.UserService;
+import io.github.projektmedinf.wifisdcryptolocker.service.impl.UserServiceImpl;
 import io.github.projektmedinf.wifisdcryptolocker.utils.CryptoUtils;
-import io.github.projektmedinf.wifisdcryptolocker.utils.DatabaseHelper;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -48,7 +49,7 @@ public class LoginActivity extends AppCompatActivity {
     private View mProgressView;
     private View mLoginFormView;
 
-    private DatabaseHelper databaseHelper;
+    private UserService userService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -100,7 +101,7 @@ public class LoginActivity extends AppCompatActivity {
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
 
-        databaseHelper = new DatabaseHelper(getApplicationContext());
+        userService = new UserServiceImpl(getApplicationContext());
     }
 
     /**
@@ -301,7 +302,7 @@ public class LoginActivity extends AppCompatActivity {
 
         @Override
         protected Boolean doInBackground(Void... params) {
-            Userdata found = databaseHelper.getUserdataByName(mUsername);
+            Userdata found = userService.getUserByUserName(mUsername);
             return found != null && CryptoUtils.comparePasswords(mPassword, found.getPassword());
         }
 
@@ -346,7 +347,7 @@ public class LoginActivity extends AppCompatActivity {
 
         @Override
         protected Boolean doInBackground(Void... params) {
-            switch ((new BigDecimal(databaseHelper.insertUserdata(mUsername,
+            switch ((new BigDecimal(userService.insertUser(mUsername,
                     CryptoUtils.hashPassword(mPassword))).intValueExact())) {
                 case -1:
                     errorMsg = getString(R.string.database_error);
