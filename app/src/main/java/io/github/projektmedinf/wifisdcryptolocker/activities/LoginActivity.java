@@ -313,7 +313,7 @@ public class LoginActivity extends AppCompatActivity {
             showProgress(false);
 
             // TODO: remove backdoor
-            if (success || mUsername.equals("test")) {
+            if (success || "test".equals(mUsername)) {
                 // start the main activity
                 Intent mainActivityIntent = new Intent(getApplicationContext(), MainActivity.class);
                 // set the password to the plain text, this way we can access it during runtime,
