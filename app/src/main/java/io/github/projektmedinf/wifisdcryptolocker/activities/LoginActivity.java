@@ -3,7 +3,6 @@ package io.github.projektmedinf.wifisdcryptolocker.activities;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
-import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -14,17 +13,16 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.inputmethod.EditorInfo;
-import android.widget.*;
-import edu.vt.middleware.password.*;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.Toast;
 import io.github.projektmedinf.wifisdcryptolocker.R;
 import io.github.projektmedinf.wifisdcryptolocker.model.User;
 import io.github.projektmedinf.wifisdcryptolocker.service.UserService;
 import io.github.projektmedinf.wifisdcryptolocker.service.impl.UserServiceImpl;
 import io.github.projektmedinf.wifisdcryptolocker.utils.CryptoUtils;
-
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
+import io.github.projektmedinf.wifisdcryptolocker.utils.SetupAppUtils;
 
 import static io.github.projektmedinf.wifisdcryptolocker.utils.Constansts.CURRENT_USER_KEY;
 
@@ -38,13 +36,7 @@ public class LoginActivity extends AppCompatActivity {
      */
     private UserLoginTask mAuthTask = null;
 
-    /**
-     * Keep track of the register task to ensure we can cancel it if requested.
-     */
-    private UserRegisterTask mRegisterTask = null;
-
     // UI references.
-    private AutoCompleteTextView mUsernameView;
     private EditText mPasswordView;
     private View mProgressView;
     private View mLoginFormView;
@@ -56,17 +48,6 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         // Set up the login form.
-        mUsernameView = (AutoCompleteTextView) findViewById(R.id.username);
-
-        // setting focus to password field if "next" is clicked
-        // it somehow didn't work through the XML with nextFocusForward or the others
-        mUsernameView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                mPasswordView.requestFocus();
-                return true;
-            }
-        });
 
         mPasswordView = (EditText) findViewById(R.id.password);
 
@@ -90,63 +71,21 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-        Button mCreateNewAccountButton = (Button) findViewById(R.id.username_create_new_button);
-        mCreateNewAccountButton.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                attemptRegister();
-            }
-        });
-
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
 
         userService = new UserServiceImpl(getApplicationContext());
     }
 
-    /**
-     * Try to register a new account.
-     */
-    private void attemptRegister() {
-
-        if (mRegisterTask != null) {
-            return;
-        }
-
-        // Reset errors.
-        mUsernameView.setError(null);
-        mPasswordView.setError(null);
-
-        // Store values at the time of the login attempt.
-        String username = mUsernameView.getText().toString();
-        String password = mPasswordView.getText().toString();
-
-        boolean cancel = false;
-        View focusView = null;
-
-        // Check for empty username
-        if (TextUtils.isEmpty(username)) {
-            mUsernameView.setError(getString(R.string.error_field_required));
-            focusView = mUsernameView;
-            cancel = true;
-        }
-
-        // Check for valid password
-        if (!isPasswordValid(password)) {
-            focusView = mPasswordView;
-            cancel = true;
-        }
-
-        if (cancel) {
-            // There was an error; don't attempt login and focus the first
-            // form field with an error.
-            focusView.requestFocus();
-        } else {
-            showProgress(true);
-            mRegisterTask = new UserRegisterTask(username, password);
-            mRegisterTask.execute((Void) null);
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (!SetupAppUtils.isSetupCompleted(this)) {
+            Intent setupIntent = new Intent(this, SetupActivity.class);
+            startActivity(setupIntent);
         }
     }
+
 
     /**
      * Attempts to sign in the account specified by the login form.
@@ -159,22 +98,13 @@ public class LoginActivity extends AppCompatActivity {
         }
 
         // Reset errors.
-        mUsernameView.setError(null);
         mPasswordView.setError(null);
 
         // Store values at the time of the login attempt.
-        String username = mUsernameView.getText().toString();
         String password = mPasswordView.getText().toString();
 
         boolean cancel = false;
         View focusView = null;
-
-        // Check for empty username
-        if (TextUtils.isEmpty(username)) {
-            mUsernameView.setError(getString(R.string.error_field_required));
-            focusView = mUsernameView;
-            cancel = true;
-        }
 
         // Check for empty password
         if (TextUtils.isEmpty(password)) {
@@ -191,63 +121,9 @@ public class LoginActivity extends AppCompatActivity {
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
             showProgress(true);
-            mAuthTask = new UserLoginTask(username, password);
+            mAuthTask = new UserLoginTask("wifiCryptoSDLockerUser", password);
             mAuthTask.execute((Void) null);
         }
-    }
-
-    /**
-     * Checks if the given password satisfies the predefined password criteria
-     *
-     * @param password the password which should be checked
-     * @return true, if the password is ok, false otherwise (in this case the error message will also be set)
-     */
-    private boolean isPasswordValid(String password) {
-
-        // pwd between 8 and 16 chars
-        LengthRule lengthRule = new LengthRule(8, 16);
-
-        // no whitespaces
-        WhitespaceRule whitespaceRule = new WhitespaceRule();
-
-        CharacterCharacteristicsRule charRule = new CharacterCharacteristicsRule();
-
-        // at least one digit
-        charRule.getRules().add(new DigitCharacterRule(1));
-
-        //at least one non-alphabetic char
-        charRule.getRules().add(new NonAlphanumericCharacterRule(1));
-
-        // at least one upper case char
-        charRule.getRules().add(new UppercaseCharacterRule(1));
-
-        // at least one lower case char
-        charRule.getRules().add(new LowercaseCharacterRule(1));
-
-        charRule.setNumberOfCharacteristics(4);
-
-        List<Rule> ruleList = new ArrayList<>();
-        ruleList.add(lengthRule);
-        ruleList.add(whitespaceRule);
-        ruleList.add(charRule);
-
-        PasswordValidator passwordValidator = new PasswordValidator(ruleList);
-        PasswordData passwordData = new PasswordData(new Password(password));
-
-        System.out.println("Before validation");
-        RuleResult ruleResult = passwordValidator.validate(passwordData);
-
-        if (!ruleResult.isValid()) {
-            StringBuilder error = new StringBuilder();
-            for (String msg :
-                    passwordValidator.getMessages(ruleResult)) {
-                error.append(msg).append('\n');
-            }
-
-            mPasswordView.setError(error.toString());
-        }
-
-        return ruleResult.isValid();
     }
 
     /**
@@ -311,9 +187,9 @@ public class LoginActivity extends AppCompatActivity {
         protected void onPostExecute(final Boolean success) {
             mAuthTask = null;
             showProgress(false);
-
+            Toast.makeText(getApplicationContext(), "Backdoor used? " + !(success), Toast.LENGTH_SHORT).show();
             // TODO: remove backdoor
-            if (success || "test".equals(mUsername)) {
+            if (success || "wifiCryptoSDLockerUser".equals(mUsername)) {
                 // start the main activity
                 Intent mainActivityIntent = new Intent(getApplicationContext(), MainActivity.class);
                 // set the password to the plain text, this way we can access it during runtime,
@@ -331,66 +207,6 @@ public class LoginActivity extends AppCompatActivity {
         @Override
         protected void onCancelled() {
             mAuthTask = null;
-            showProgress(false);
-        }
-    }
-
-    /**
-     * Represents an asynchronous registration task used to register
-     * a new user.
-     */
-    public class UserRegisterTask extends AsyncTask<Void, Void, Boolean> {
-
-        private final String mUsername;
-        private final String mPassword;
-        private String errorMsg;
-
-        UserRegisterTask(String username, String password) {
-            mUsername = username;
-            mPassword = password;
-        }
-
-        @Override
-        protected Boolean doInBackground(Void... params) {
-            switch ((new BigDecimal(userService.insertUser(mUsername,
-                    CryptoUtils.hashPassword(mPassword))).intValueExact())) {
-                case -1:
-                    errorMsg = getString(R.string.database_error);
-                    return false;
-                case -2:
-                    errorMsg = getString(R.string.username_already_exists);
-                    return false;
-                default:
-                    return true;
-            }
-        }
-
-        @Override
-        protected void onPostExecute(final Boolean success) {
-            mRegisterTask = null;
-            showProgress(false);
-
-            if (success) {
-                // refresh page with success message
-                finish();
-                startActivity(getIntent());
-
-                Context context = getApplicationContext();
-                CharSequence text = "User created. Please sign in";
-                int duration = Toast.LENGTH_SHORT;
-
-                Toast toast = Toast.makeText(context, text, duration);
-                toast.show();
-            } else {
-                mUsernameView.setError(errorMsg);
-                mUsernameView.requestFocus();
-            }
-        }
-
-        @Override
-        protected void onCancelled() {
-            mRegisterTask = null;
-            errorMsg = null;
             showProgress(false);
         }
     }

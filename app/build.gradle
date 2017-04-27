@@ -48,6 +48,7 @@ dependencies {
         exclude group: 'org.bouncycastle'
     }
     testCompile 'junit:junit:4.12'
+    compile 'com.nineoldandroids:library:2.4.+'
 }
 
 coveralls {
