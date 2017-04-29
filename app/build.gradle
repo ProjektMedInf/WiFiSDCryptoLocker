@@ -26,6 +26,9 @@ android {
         exclude 'META-INF/license.txt'
         exclude 'META-INF/notice.txt'
     }
+    lintOptions {
+        warning 'InvalidPackage'
+    }
 }
 
 dependencies {
