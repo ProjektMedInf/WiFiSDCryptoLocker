@@ -22,9 +22,9 @@ import io.github.projektmedinf.wifisdcryptolocker.model.User;
 import io.github.projektmedinf.wifisdcryptolocker.service.UserService;
 import io.github.projektmedinf.wifisdcryptolocker.service.impl.UserServiceImpl;
 import io.github.projektmedinf.wifisdcryptolocker.utils.CryptoUtils;
-import io.github.projektmedinf.wifisdcryptolocker.utils.SetupAppUtils;
 
 import static io.github.projektmedinf.wifisdcryptolocker.utils.Constansts.CURRENT_USER_KEY;
+import static io.github.projektmedinf.wifisdcryptolocker.utils.Constansts.USER_NAME;
 
 /**
  * A login screen that offers login via username/password.
@@ -80,7 +80,7 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     public void onResume() {
         super.onResume();
-        if (!SetupAppUtils.isSetupCompleted(this)) {
+        if (userService.getUserByUserName(USER_NAME) == null) {
             Intent setupIntent = new Intent(this, SetupActivity.class);
             startActivity(setupIntent);
         }
@@ -121,7 +121,7 @@ public class LoginActivity extends AppCompatActivity {
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
             showProgress(true);
-            mAuthTask = new UserLoginTask("wifiCryptoSDLockerUser", password);
+            mAuthTask = new UserLoginTask(USER_NAME, password);
             mAuthTask.execute((Void) null);
         }
     }
@@ -189,7 +189,7 @@ public class LoginActivity extends AppCompatActivity {
             showProgress(false);
             Toast.makeText(getApplicationContext(), "Backdoor used? " + !(success), Toast.LENGTH_SHORT).show();
             // TODO: remove backdoor
-            if (success || "wifiCryptoSDLockerUser".equals(mUsername)) {
+            if (success || USER_NAME.equals(mUsername)) {
                 // start the main activity
                 Intent mainActivityIntent = new Intent(getApplicationContext(), MainActivity.class);
                 // set the password to the plain text, this way we can access it during runtime,

@@ -17,9 +17,14 @@ import io.github.projektmedinf.wifisdcryptolocker.R;
 import io.github.projektmedinf.wifisdcryptolocker.exceptions.InvalidPasswordException;
 import io.github.projektmedinf.wifisdcryptolocker.service.UserService;
 import io.github.projektmedinf.wifisdcryptolocker.service.impl.UserServiceImpl;
-import io.github.projektmedinf.wifisdcryptolocker.utils.*;
+import io.github.projektmedinf.wifisdcryptolocker.utils.CrossfadePageTransformer;
+import io.github.projektmedinf.wifisdcryptolocker.utils.CryptoUtils;
+import io.github.projektmedinf.wifisdcryptolocker.utils.ScreenSlidePagerAdapter;
+import io.github.projektmedinf.wifisdcryptolocker.utils.WifiScanReceiver;
 
 import java.math.BigDecimal;
+
+import static io.github.projektmedinf.wifisdcryptolocker.utils.Constansts.USER_NAME;
 
 /**
  * This class was originally written by matrixxun
@@ -189,9 +194,8 @@ public class SetupActivity extends AppCompatActivity {
             pager.setCurrentItem(0);
             return;
         }
-        SetupAppUtils.setSetupCompleted(this);
         setContentView(R.layout.finish_setup);
-        mRegisterTask = new SetupActivity.UserRegisterTask("wifiCryptoSDLockerUser", temp_password);
+        mRegisterTask = new SetupActivity.UserRegisterTask(USER_NAME, temp_password);
         mRegisterTask.execute((Void) null);
     }
 

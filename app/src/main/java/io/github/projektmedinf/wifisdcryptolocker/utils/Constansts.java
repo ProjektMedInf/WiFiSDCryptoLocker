@@ -5,4 +5,5 @@ package io.github.projektmedinf.wifisdcryptolocker.utils;
  */
 public class Constansts {
     public static final String CURRENT_USER_KEY = "current_user";
+    public static final String USER_NAME ="wifiCryptoSDLockerUser";
 }
