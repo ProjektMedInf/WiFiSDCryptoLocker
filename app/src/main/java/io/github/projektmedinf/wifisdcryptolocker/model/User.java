@@ -85,4 +85,17 @@ public class User implements Parcelable{
             return new User[i];
         }
     };
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        User user = (User) o;
+
+        if (id != user.id) return false;
+        if (username != null ? !username.equals(user.username) : user.username != null) return false;
+        if (password != null ? !password.equals(user.password) : user.password != null) return false;
+        return createdAt != null ? createdAt.equals(user.createdAt) : user.createdAt == null;
+    }
 }
