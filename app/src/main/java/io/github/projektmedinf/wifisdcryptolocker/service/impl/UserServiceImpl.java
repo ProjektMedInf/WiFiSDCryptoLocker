@@ -9,19 +9,25 @@ import io.github.projektmedinf.wifisdcryptolocker.service.UserService;
 /**
  * Created by stiefel40k on 20.04.17.
  */
-public class UserServiceImpl implements UserService{
+public class UserServiceImpl implements UserService {
 
     private UserDao userDao;
 
-    public UserServiceImpl(Context context){
+    public UserServiceImpl(Context context) {
         userDao = new UserDaoImpl(context);
     }
 
+    /**
+     * @see UserService#getUserByUserName(String)
+     */
     @Override
     public User getUserByUserName(String userName) {
         return userDao.getUserByUserName(userName);
     }
 
+    /**
+     * @see UserService#insertUser(String, String)
+     */
     @Override
     public long insertUser(String userName, String password) {
         return userDao.insertUser(userName, password);
