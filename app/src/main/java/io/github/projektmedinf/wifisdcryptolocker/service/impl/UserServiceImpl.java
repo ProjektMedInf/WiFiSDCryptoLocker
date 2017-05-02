@@ -17,11 +17,15 @@ public class UserServiceImpl implements UserService {
         userDao = new UserDaoImpl(context);
     }
 
+
     /**
      * @see UserService#getUserByUserName(String)
      */
     @Override
-    public User getUserByUserName(String userName) {
+    public User getUserByUserName(String userName) throws IllegalArgumentException {
+        if (userName == null) {
+            throw new IllegalArgumentException("userName cannot be null");
+        }
         return userDao.getUserByUserName(userName);
     }
 

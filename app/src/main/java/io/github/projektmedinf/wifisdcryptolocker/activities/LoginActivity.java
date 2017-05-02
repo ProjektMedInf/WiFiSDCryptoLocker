@@ -303,7 +303,11 @@ public class LoginActivity extends AppCompatActivity {
 
         @Override
         protected Boolean doInBackground(Void... params) {
-            found = userService.getUserByUserName(mUsername);
+            try {
+                found = userService.getUserByUserName(mUsername);
+            } catch (IllegalArgumentException e) {
+                Toast.makeText(getApplicationContext(), e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+            }
             return found != null && CryptoUtils.comparePasswords(mPassword, found.getPassword());
         }
 
