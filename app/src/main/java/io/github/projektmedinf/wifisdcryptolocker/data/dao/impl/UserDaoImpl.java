@@ -45,7 +45,11 @@ public class UserDaoImpl implements UserDao {
                             cursor.getLong(cursor.getColumnIndex(COLUMN_NAME_USER_ID)),
                             cursor.getString(cursor.getColumnIndex(COLUMN_NAME_USERNAME)),
                             cursor.getString(cursor.getColumnIndex(COLUMN_NAME_PASSWORD)),
-                            dateFormat.parse(cursor.getString(cursor.getColumnIndex(COLUMN_NAME_CREATED_AT)))
+                            cursor.getBlob(cursor.getColumnIndex(COLUMN_NAME_SALT)),
+                            cursor.getBlob(cursor.getColumnIndex(COLUMN_NAME_CRYPTOKEY)),
+                            cursor.getBlob(cursor.getColumnIndex(COLUMN_NAME_CRYPTOKEY_IV)),
+                            dateFormat.parse(cursor.getString(cursor.getColumnIndex(COLUMN_NAME_CREATED_AT))),
+                            cursor.getString(cursor.getColumnIndex(COLUMN_NAME_PASSWORD))
                     );
                 } catch (ParseException e) {
                     throw new SQLException("Parsing the date led to an error.");
@@ -58,14 +62,17 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public long insertUser(String userName, String password) {
-        if (getUserByUserName(userName) != null) {
+    public long insertUser(User user) {
+        if (getUserByUserName(user.getUsername()) != null) {
             return -2;
         }
 
         ContentValues contentValues = new ContentValues();
-        contentValues.put(COLUMN_NAME_USERNAME, userName);
-        contentValues.put(COLUMN_NAME_PASSWORD, password);
+        contentValues.put(COLUMN_NAME_USERNAME, user.getUsername());
+        contentValues.put(COLUMN_NAME_PASSWORD, user.getPassword());
+        contentValues.put(COLUMN_NAME_SALT, user.getSalt());
+        contentValues.put(COLUMN_NAME_CRYPTOKEY, user.getCryptoKey());
+        contentValues.put(COLUMN_NAME_CRYPTOKEY_IV, user.getCryptoKeyIV());
         contentValues.put(COLUMN_NAME_CREATED_AT, getDateTime());
 
         return sqLiteDatabase.insert(TABLE_NAME_USER, null, contentValues);

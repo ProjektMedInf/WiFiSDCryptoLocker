@@ -8,6 +8,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -15,14 +16,14 @@ import android.view.WindowManager;
 import android.widget.*;
 import io.github.projektmedinf.wifisdcryptolocker.R;
 import io.github.projektmedinf.wifisdcryptolocker.exceptions.InvalidPasswordException;
+import io.github.projektmedinf.wifisdcryptolocker.exceptions.ServiceException;
+import io.github.projektmedinf.wifisdcryptolocker.model.User;
 import io.github.projektmedinf.wifisdcryptolocker.service.UserService;
 import io.github.projektmedinf.wifisdcryptolocker.service.impl.UserServiceImpl;
 import io.github.projektmedinf.wifisdcryptolocker.utils.CrossfadePageTransformer;
 import io.github.projektmedinf.wifisdcryptolocker.utils.CryptoUtils;
 import io.github.projektmedinf.wifisdcryptolocker.utils.ScreenSlidePagerAdapter;
 import io.github.projektmedinf.wifisdcryptolocker.utils.WifiScanReceiver;
-
-import java.math.BigDecimal;
 
 import static io.github.projektmedinf.wifisdcryptolocker.utils.Constansts.USER_NAME;
 
@@ -254,7 +255,6 @@ public class SetupActivity extends AppCompatActivity {
 
         private final String mUsername;
         private final String mPassword;
-        private String errorMsg;
 
         UserRegisterTask(String username, String password) {
             mUsername = username;
@@ -263,16 +263,22 @@ public class SetupActivity extends AppCompatActivity {
 
         @Override
         protected Boolean doInBackground(Void... params) {
-            switch ((new BigDecimal(userService.insertUser(mUsername,
-                    CryptoUtils.hashPassword(mPassword))).intValueExact())) {
-                case -1:
-                    errorMsg = getString(R.string.database_error);
-                    return false;
-                case -2:
-                    errorMsg = getString(R.string.username_already_exists);
-                    return false;
-                default:
-                    return true;
+            User newUser = new User();
+            newUser.setUsername(mUsername);
+            newUser.setPasswordNotHashed(mPassword);
+            newUser.setPassword(CryptoUtils.hashPassword(mPassword));
+
+            try {
+                userService.insertUser(newUser);
+                return true;
+            } catch (final ServiceException e) {
+                Log.e("You fucked it up", e.getMessage(), e);
+                SetupActivity.this.runOnUiThread(new Runnable() {
+                    public void run() {
+                        Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                });
+                return false;
             }
         }
 
@@ -294,7 +300,6 @@ public class SetupActivity extends AppCompatActivity {
         @Override
         protected void onCancelled() {
             mRegisterTask = null;
-            errorMsg = null;
         }
     }
 }

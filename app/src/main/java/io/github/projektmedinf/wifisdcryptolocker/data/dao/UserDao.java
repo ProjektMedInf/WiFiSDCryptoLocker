@@ -12,9 +12,8 @@ public interface UserDao {
     /**
      * Inserts a new user into the database
      *
-     * @param userName the chosen username
-     * @param password the hashed password
+     * @param user user to insert
      * @return the id of the user on success. -1 if a general database error occurred and -2 i the user already exists.
      */
-    long insertUser(String userName, String password);
+    long insertUser(User user);
 }
