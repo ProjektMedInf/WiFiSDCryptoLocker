@@ -1,5 +1,6 @@
 package io.github.projektmedinf.wifisdcryptolocker.data.dao.impl;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -47,5 +48,15 @@ public class ImageDaoImpl implements ImageDao {
         }
 
         return imageList;
+    }
+
+    @Override
+    public long insertImage(Image image) {
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(COLUMN_NAME_ENCRYPTED_IMAGE_DATA, image.getEncryptedImageData());
+        contentValues.put(COLUMN_NAME_INITIALISATION_VECTOR, image.getInitialisationVector());
+        contentValues.put(COLUMN_NAME_PADDING, image.getPadding());
+        contentValues.put(COLUMN_NAME_FK_SESSION_ID, image.getSession().getId());
+        return sqLiteDatabase.insert(TABLE_NAME_IMAGE, null, contentValues);
     }
 }

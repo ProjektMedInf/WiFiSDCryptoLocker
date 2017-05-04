@@ -20,8 +20,20 @@ public class ImageServiceImpl implements ImageService {
         imageDao = new ImageDaoImpl(context);
     }
 
+    /**
+     * @see ImageService#getImagesBySession(Session)
+     */
     @Override
     public List<Image> getImagesBySession(Session session) {
         return imageDao.getImagesBySession(session);
+    }
+
+    /**
+     * @see ImageService#insertImage(Image)
+     */
+    @Override
+    public long insertImage(Image image)
+    {
+        return imageDao.insertImage(image);
     }
 }
