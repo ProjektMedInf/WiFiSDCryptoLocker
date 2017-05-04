@@ -195,7 +195,7 @@ public class LoginActivity extends AppCompatActivity {
                 // set the password to the plain text, this way we can access it during runtime,
                 // and the user doesn't have to type it in every time git he/she wants to access
                 // encrypted data
-                found.setPassword(mPassword);
+                found.setPasswordNotHashed(mPassword);
                 mainActivityIntent.putExtra(CURRENT_USER_KEY, found);
                 startActivity(mainActivityIntent);
             } else {

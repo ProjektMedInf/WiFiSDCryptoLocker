@@ -1,10 +1,11 @@
 package io.github.projektmedinf.wifisdcryptolocker.service;
 
+import io.github.projektmedinf.wifisdcryptolocker.exceptions.ServiceException;
 import io.github.projektmedinf.wifisdcryptolocker.model.User;
 
 /**
  * Created by stiefel40k on 20.04.17.
- *
+ * <p>
  * Service layer for {@code User}.
  *
  * @see io.github.projektmedinf.wifisdcryptolocker.model.User
@@ -23,13 +24,11 @@ public interface UserService {
     User getUserByUserName(String userName);
 
     /**
-     * Insert a new {@code User} given an {@code userName} and a {@code password}
+     * Insert a new {@code User} given a {@code user}
      *
-     * @param userName name of the user
-     * @param password password of the user
+     * @param user user to insert
      * @return the id of the newly inserted user
      * @should create new user from given username and password
-     * @should throw illegal argument exception given null
      */
-    long insertUser(String userName, String password);
+    long insertUser(User user) throws ServiceException;
 }
