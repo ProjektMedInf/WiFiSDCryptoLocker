@@ -11,4 +11,6 @@ import java.util.List;
 public interface ImageDao {
 
     List<Image> getImagesBySession(Session session);
+
+    long insertImage(Image image);
 }
