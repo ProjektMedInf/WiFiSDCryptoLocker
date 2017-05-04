@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:id="@+id/welcome_fragment"
+              android:layout_width="fill_parent"
+              android:layout_height="fill_parent"
+              android:orientation="vertical"
+              android:clipChildren="false"
+              android:background="@color/setup_page_1_background"
+              android:layout_weight="6"
+              android:paddingTop="48dp">
+
+    <FrameLayout
+            android:id="@+id/images"
+            android:layout_width="fill_parent"
+            android:layout_height="0dp"
+            android:layout_weight="4"
+            android:clipChildren="false">
+        <ImageView
+                android:id="@+id/topImage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:scaleType="centerInside"
+                android:src="@drawable/setup_page_1_locker"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"
+                android:layout_gravity="center_horizontal|bottom"/>
+
+    </FrameLayout>
+
+    <TextView
+            android:id="@+id/heading"
+            android:layout_width="fill_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:paddingLeft="24dp"
+            android:paddingRight="24dp"
+            android:gravity="bottom|center_horizontal"
+            android:text="@string/setup_page_1_header"
+            android:minHeight="@dimen/welcome_content_min_height"
+            android:textAppearance="@style/WelcomeHeadingAppearance"/>
+
+    <TextView
+            android:id="@+id/setup_page_1_enter_password"
+            android:text="@string/setup_page_1_enter_password"
+            android:layout_width="fill_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:paddingLeft="24dp"
+            android:paddingRight="24dp"
+            android:gravity="bottom"
+            android:minHeight="@dimen/welcome_content_min_height"
+            android:textAppearance="@style/WelcomeContentAppearance"/>
+
+    <EditText
+            android:id="@+id/registerPassword"
+            style="@style/EditTextStyleWhite"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="24dp"
+            android:paddingRight="24dp"
+            android:hint="@string/prompt_password"
+            android:imeActionLabel="@string/action_sign_in_short"
+            android:imeOptions="actionDone"
+            android:inputType="textPassword"
+            android:background="@drawable/edit_text"
+            android:textCursorDrawable="@null"
+            android:layout_gravity="center_horizontal|top"
+            android:maxLines="1"/>
+
+    <TextView
+            android:id="@+id/content"
+            android:text=""
+            android:layout_width="fill_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:paddingLeft="24dp"
+            android:paddingRight="24dp"
+            android:gravity="top"
+            android:minHeight="@dimen/welcome_content_min_height"
+            android:textAppearance="@style/WelcomeContentAppearance"/>
+
+    <View
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:background="@android:color/transparent"/>
+
+</LinearLayout>

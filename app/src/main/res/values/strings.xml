@@ -21,4 +21,18 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
     <string name="action_settings">Settings</string>
+
+    <string name="title_activity_preferences">PreferencesActivity</string>
+    <string name="action_start_app_setup">Start app setup</string>
+    <string name="resetButton">resetButton</string>
+
+    <string name="title_activity_setup">SetupActivity</string>
+    <string name="setup_page_1_header">Select a Password for your Locker</string>
+    <string name="setup_page_1_enter_password">Please enter password</string>
+    <string name="setup_page_2_header">Make your WiFi SD Card ready</string>
+    <string name="setup_page_2_subheader">Insert your WiFi SD Card in your Camera and turn it on.</string>
+    <string name="setup_page_3_header">Register your WiFi Card</string>
+    <string name="setup_page_3_subheader">Select your WiFi Card from the list</string>
+    <string name="setup_page_4_header">Setup finished</string>
+    <string name="setup_page_4_subheader">Please confirm your entered data or apply changes</string>
 </resources>
