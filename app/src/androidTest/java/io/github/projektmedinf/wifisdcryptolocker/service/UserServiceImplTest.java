@@ -1,4 +1,4 @@
-package io.github.projektmedinf.wifisdcryptolocker;
+package io.github.projektmedinf.wifisdcryptolocker.service;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
@@ -6,10 +6,11 @@ import android.support.test.runner.AndroidJUnit4;
 import io.github.projektmedinf.wifisdcryptolocker.data.dao.UserDao;
 import io.github.projektmedinf.wifisdcryptolocker.data.dao.impl.UserDaoImpl;
 import io.github.projektmedinf.wifisdcryptolocker.model.User;
-import io.github.projektmedinf.wifisdcryptolocker.service.UserService;
 import io.github.projektmedinf.wifisdcryptolocker.service.impl.UserServiceImpl;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 
 import static org.hamcrest.CoreMatchers.is;
@@ -26,7 +27,8 @@ public class UserServiceImplTest {
 
     private static final String VALID_USER_NAME = "validUser";
     private static final String INVALID_USER_NAME = "invalidUser";
-
+    @Rule
+    public ExpectedException expectedException = ExpectedException.none();
     private UserService userService;
     private User validUser;
 
@@ -47,5 +49,12 @@ public class UserServiceImplTest {
     @Test
     public void shouldReturnNullIfNoMatchWasFound() throws Exception {
         assertThat(userService.getUserByUserName(INVALID_USER_NAME), is(nullValue()));
+    }
+
+    @Test
+    public void shouldThrowIllegalArgumentExceptionGivenNull() throws Exception {
+        expectedException.expect(IllegalArgumentException.class);
+        expectedException.expectMessage("userName cannot be null");
+        userService.getUserByUserName(null);
     }
 }

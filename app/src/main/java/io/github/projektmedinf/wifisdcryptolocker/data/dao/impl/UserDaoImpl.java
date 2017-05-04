@@ -21,14 +21,15 @@ import static io.github.projektmedinf.wifisdcryptolocker.data.model.UserDatabase
  */
 public class UserDaoImpl implements UserDao {
 
-
-
     private SQLiteDatabase sqLiteDatabase;
 
-    public UserDaoImpl(Context context){
+    public UserDaoImpl(Context context) {
         sqLiteDatabase = new DatabaseHelper(context).getReadableDatabase();
     }
 
+    /**
+     * @see UserDao#getUserByUserName(String)
+     */
     @Override
     public User getUserByUserName(String userName) {
         User toReturn = null;
@@ -57,6 +58,9 @@ public class UserDaoImpl implements UserDao {
         return toReturn;
     }
 
+    /**
+     * @see UserDao#insertUser(String, String)
+     */
     @Override
     public long insertUser(String userName, String password) {
         if (getUserByUserName(userName) != null) {

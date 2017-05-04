@@ -16,11 +16,12 @@ public interface UserService {
      *
      * @param userName name of the wanted user
      * @return the user matching the given user name
+     * @throws illegal argument exception given null
      * @should return user matching the given user name
      * @should return null if no match was found
      * @should throw illegal argument exception given null
      */
-    User getUserByUserName(String userName);
+    User getUserByUserName(String userName) throws IllegalArgumentException;
 
     /**
      * Insert a new {@code User} given an {@code userName} and a {@code password}
