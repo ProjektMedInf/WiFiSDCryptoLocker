@@ -35,7 +35,11 @@ public class UserServiceImplTest {
         Context appContext = InstrumentationRegistry.getTargetContext();
         userService = new UserServiceImpl(appContext);
         UserDao userDao = new UserDaoImpl(appContext);
-        userDao.insertUser(VALID_USER_NAME, "12345");
+        validUser = new User();
+        validUser.setUsername(VALID_USER_NAME);
+        validUser.setPassword("12345");
+        userDao.insertUser(validUser);
+        validUser = null;
         validUser = userDao.getUserByUserName(VALID_USER_NAME);
     }
 
