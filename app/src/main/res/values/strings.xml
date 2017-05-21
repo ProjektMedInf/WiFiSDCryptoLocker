@@ -19,6 +19,8 @@
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="openDrawer">open_drawer</string>
+    <string name="closeDrawer">close_drawer</string>
 
     <string name="action_settings">Settings</string>
 
@@ -35,4 +37,12 @@
     <string name="setup_page_3_subheader">Select your WiFi Card from the list</string>
     <string name="setup_page_4_header">Setup finished</string>
     <string name="setup_page_4_subheader">Please confirm your entered data or apply changes</string>
+
+    <!-- Toolbar titles when navigation menu item is selected -->
+    <string-array name="nav_item_activity_titles">
+        <item>Home</item>
+        <item>Import</item>
+        <item>Gallery</item>
+    </string-array>
+
 </resources>
