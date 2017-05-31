@@ -10,5 +10,19 @@ import java.util.List;
  */
 public interface ImageService {
 
+    /**
+     * Get {@code Image} by their {@code session}
+     *
+     * @param session session of the wanted image
+     * @return all images corresponding to given session
+     */
     List<Image> getImagesBySession(Session session);
+
+    /**
+     * Insert a new {@code Image} given a {@code image}
+     *
+     * @param image image to insert
+     * @return the id of the newly inserted image
+     */
+    long insertImage(Image image);
 }
