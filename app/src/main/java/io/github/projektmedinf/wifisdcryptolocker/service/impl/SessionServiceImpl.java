@@ -11,16 +11,21 @@ import java.util.List;
 /**
  * Created by stiefel40k on 20.04.17.
  */
-public class SessionServiceImpl implements SessionService{
+public class SessionServiceImpl implements SessionService {
 
     private SessionDao sessionDao;
 
-    public SessionServiceImpl(Context context){
+    public SessionServiceImpl(Context context) {
         sessionDao = new SessionDaoImpl(context);
     }
 
     @Override
     public List<Session> getAllSessions() {
         return sessionDao.getAllSessions();
+    }
+
+    @Override
+    public long insertSession(Session session) {
+        return sessionDao.insertSession(session);
     }
 }

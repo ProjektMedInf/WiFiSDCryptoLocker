@@ -4,10 +4,9 @@
              android:layout_height="match_parent"
              tools:context="io.github.projektmedinf.wifisdcryptolocker.fragments.HomeFragment">
 
-    <TextView
-            android:text="This is the home fragment"
-            android:layout_width="227dp"
-            android:layout_gravity="center"
-            android:layout_height="wrap_content" android:id="@+id/textView"/>
+    <Button
+            android:text="Insert Session"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content" android:id="@+id/insertSessionButton"/>
 
 </FrameLayout>

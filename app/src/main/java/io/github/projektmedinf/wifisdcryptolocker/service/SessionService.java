@@ -9,5 +9,18 @@ import java.util.List;
  */
 public interface SessionService {
 
+    /**
+     * Get all {@code Session}s
+     *
+     * @return list of all sessions
+     */
     public List<Session> getAllSessions();
+
+    /**
+     * Insert a new {@code Session} given a {@code session}
+     *
+     * @param session session to insert
+     * @return the id of the newly inserted session
+     */
+    long insertSession(Session session);
 }

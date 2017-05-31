@@ -1,5 +1,6 @@
 package io.github.projektmedinf.wifisdcryptolocker.data.dao.impl;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -33,15 +34,16 @@ public class SessionDaoImpl implements SessionDao {
 
         if (cursor != null) {
             if (cursor.moveToFirst()) {
-                // TODO change date to decrypted
-                sessionList.add(new Session(
-                        cursor.getLong(cursor.getColumnIndex(COLUMN_NAME_SESSION_ID)),
-                        cursor.getBlob(cursor.getColumnIndex(COLUMN_NAME_ENCRYPTED_DATE)),
-                        new Date(),
-                        cursor.getString(cursor.getColumnIndex(COLUMN_NAME_LOCATION)),
-                        cursor.getBlob(cursor.getColumnIndex(COLUMN_NAME_INITIALISATION_VECTOR)))
-                );
-
+                do {
+                    // TODO change date to decrypted
+                    sessionList.add(new Session(
+                            cursor.getLong(cursor.getColumnIndex(COLUMN_NAME_SESSION_ID)),
+                            cursor.getBlob(cursor.getColumnIndex(COLUMN_NAME_ENCRYPTED_DATE)),
+                            new Date(),
+                            cursor.getString(cursor.getColumnIndex(COLUMN_NAME_LOCATION)),
+                            cursor.getBlob(cursor.getColumnIndex(COLUMN_NAME_INITIALISATION_VECTOR)))
+                    );
+                } while (cursor.moveToNext());
             }
             cursor.close();
         }
@@ -70,5 +72,14 @@ public class SessionDaoImpl implements SessionDao {
         }
 
         return toReturn;
+    }
+
+    @Override
+    public long insertSession(Session session) {
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(COLUMN_NAME_ENCRYPTED_DATE, session.getEncryptedDate());
+        contentValues.put(COLUMN_NAME_LOCATION, session.getLocation());
+        contentValues.put(COLUMN_NAME_INITIALISATION_VECTOR, session.getIv());
+        return sqLiteDatabase.insert(TABLE_NAME_SESSION, null, contentValues);
     }
 }

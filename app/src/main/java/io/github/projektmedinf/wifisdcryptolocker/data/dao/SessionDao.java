@@ -12,4 +12,6 @@ public interface SessionDao {
     public List<Session> getAllSessions();
 
     public Session getSessionBySessionId(long sessionId);
+
+    public long insertSession(Session session);
 }
