@@ -1,5 +1,7 @@
 package io.github.projektmedinf.wifisdcryptolocker.model;
 
+import android.graphics.Bitmap;
+
 /**
  * Created by stiefel40k on 20.04.17.
  */
@@ -11,6 +13,9 @@ public class Image {
     private int padding;
     private Session session;
     private byte[] decryptedImageData;
+    //Todo Remove
+    private String title;
+    private Bitmap image;
 
     public Image(long id, byte[] encryptedImageData, byte[] initialisationVector, int padding, Session session, byte[] decryptedImageData) {
         this.id = id;
@@ -67,5 +72,21 @@ public class Image {
 
     public void setDecryptedImageData(byte[] decryptedImageData) {
         this.decryptedImageData = decryptedImageData;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public Bitmap getImage() {
+        return image;
+    }
+
+    public void setImage(Bitmap image) {
+        this.image = image;
     }
 }

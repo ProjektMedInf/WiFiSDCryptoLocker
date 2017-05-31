@@ -45,4 +45,10 @@
         <item>Gallery</item>
     </string-array>
 
+    <string-array name="image_ids">
+        <item>@drawable/setup_page_4_check</item>
+        <item>@drawable/setup_page_2_insert</item>
+        <item>@drawable/setup_page_1_locker</item>
+    </string-array>
+
 </resources>

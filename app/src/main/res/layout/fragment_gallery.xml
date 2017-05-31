@@ -4,11 +4,18 @@
              android:layout_height="match_parent"
              tools:context="io.github.projektmedinf.wifisdcryptolocker.fragments.GalleryFragment">
 
-    <TextView
-            android:text="This is the gallery fragment"
-            android:layout_width="227dp"
-            android:layout_gravity="center"
-            android:layout_height="wrap_content" android:id="@+id/textView"/>
-
+    <GridView
+            android:id="@+id/gridView"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:columnWidth="100dp"
+            android:drawSelectorOnTop="true"
+            android:gravity="center"
+            android:numColumns="auto_fit"
+            android:stretchMode="columnWidth"
+            android:verticalSpacing="5dp"
+            android:focusable="true"
+            android:clickable="true"/>
 
 </FrameLayout>
