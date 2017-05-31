@@ -34,15 +34,16 @@ public class ImageDaoImpl implements ImageDao {
 
         if (cursor != null) {
             if (cursor.moveToFirst()) {
-                imageList.add(new Image(
-                        cursor.getLong(cursor.getColumnIndex(COLUMN_NAME_IMAGE_ID)),
-                        cursor.getBlob(cursor.getColumnIndex(COLUMN_NAME_ENCRYPTED_IMAGE_DATA)),
-                        cursor.getBlob(cursor.getColumnIndex(COLUMN_NAME_INITIALISATION_VECTOR)),
-                        cursor.getInt(cursor.getColumnIndex(COLUMN_NAME_PADDING)),
-                        session,
-                        null)
-                );
-
+                do {
+                    imageList.add(new Image(
+                            cursor.getLong(cursor.getColumnIndex(COLUMN_NAME_IMAGE_ID)),
+                            cursor.getBlob(cursor.getColumnIndex(COLUMN_NAME_ENCRYPTED_IMAGE_DATA)),
+                            cursor.getBlob(cursor.getColumnIndex(COLUMN_NAME_INITIALISATION_VECTOR)),
+                            cursor.getInt(cursor.getColumnIndex(COLUMN_NAME_PADDING)),
+                            session,
+                            null)
+                    );
+                } while (cursor.moveToNext());
             }
             cursor.close();
         }
