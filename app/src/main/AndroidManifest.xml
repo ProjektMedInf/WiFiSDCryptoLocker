@@ -32,5 +32,6 @@
                 android:label="@string/title_activity_setup"
                 android:theme="@style/Theme.AppCompat.Light.NoActionBar">
         </activity>
+        <activity android:name=".activities.ImageDetailsActivity"/>
     </application>
 </manifest>
