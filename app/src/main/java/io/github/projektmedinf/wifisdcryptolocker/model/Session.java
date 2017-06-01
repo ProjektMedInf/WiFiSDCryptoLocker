@@ -60,4 +60,9 @@ public class Session {
     public void setIv(byte[] iv) {
         this.iv = iv;
     }
+
+    @Override
+    public String toString() {
+        return "#" + getId() + "/" + getDate() + "/" + getLocation();
+    }
 }
